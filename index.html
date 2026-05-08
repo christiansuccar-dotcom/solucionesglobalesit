@@ -3,177 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christian Succar | Soluciones Globales IT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <title>SOLUCIONES GLOBALES IT | CHRISTIAN SUCCAR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@200;400;700&family=JetBrains+Mono:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: '#0a0a0b',
-                        card: '#131315',
-                        accent: '#00e5ff',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        body { background-color: #0a0a0b; color: #f5f5f7; scroll-behavior: smooth; }
-        .grid-bg {
-            background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
+        /* --- CONFIGURACIÓN MINIMALISTA --- */
+        :root {
+            --bg: #050508;
+            --accent: #00e5ff; /* Turquesa eléctrico */
+            --accent-glow: rgba(0, 229, 255, 0.1);
+            --text-dim: #666;
+            --font-tech: 'Orbitron', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-body: 'Inter', sans-serif;
+            --glass: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.07);
         }
-        .glass { background: rgba(19, 19, 21, 0.8); backdrop-filter: blur(12px); }
-        .card-hover:hover { border-color: rgba(0, 229, 255, 0.4); transform: translateY(-4px); }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--bg); color: #fff; font-family: var(--font-body); overflow-x: hidden; font-weight: 200; line-height: 1.5; }
+
+        /* --- PRELOADER (Simulación Flash Loading) --- */
+        #preloader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .loader-text { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 4px; margin-bottom: 15px; animation: blink 0.3s infinite alternate; }
+        .loader-line { width: 250px; height: 1px; background: rgba(255,255,255,0.1); position: relative; }
+        .loader-progress { position: absolute; height: 100%; background: var(--accent); width: 0%; animation: load 2s forwards ease-in-out; box-shadow: 0 0 15px var(--accent); }
+
+        @keyframes load { to { width: 100%; } }
+        @keyframes blink { from { opacity: 1; } to { opacity: 0.3; } }
+
+        /* --- BACKGROUND DINÁMICO --- */
+        #canvas-bg { position: fixed; inset: 0; z-index: -1; opacity: 0.3; }
+
+        /* --- LAYOUT --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+        /* --- HERO: Entrada Flash --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .hero-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; }
+        .hero h1 { font-family: var(--font-tech); font-size: clamp(3.5rem, 12vw, 7rem); font-weight: 900; letter-spacing: -6px; line-height: 0.85; margin-bottom: 15px; text-transform: uppercase; }
+        .hero h1 span { color: var(--bg); text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; }
+        
+        .hero-details { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 40px; }
+        .detail-item { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); }
+        .detail-item strong { display: block; color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.5px; }
+
+        /* --- BOTÓN WHATSAPP --- */
+        .btn-connect { margin-top: 60px; display: inline-flex; align-items: center; gap: 15px; background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 20px 40px; border-radius: 2px; text-decoration: none; font-family: var(--font-tech); font-weight: 700; transition: 0.3s; box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.05); }
+        .btn-connect:hover { background: var(--accent); color: #000; box-shadow: 0 0 30px var(--accent-glow); }
+
+        /* --- SERVICIOS GRID --- */
+        .section-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); margin-bottom: 60px; display: block; text-transform: uppercase; letter-spacing: 3px; }
+        .services-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; padding-bottom: 100px; }
+        
+        .service-card { grid-column: span 4; background: var(--glass); border: 1px solid var(--border); padding: 40px; transition: all 0.5s ease; cursor: default; }
+        .service-card:hover { border-color: var(--accent); transform: translateY(-3px) scale(1.01); background: rgba(255,255,255,0.04); box-shadow: 0 10px 40px -10px rgba(0,229,255,0.05); }
+        .service-card i { font-size: 1.8rem; color: var(--accent); margin-bottom: 30px; opacity: 0.7; transition: 0.3s; }
+        .service-card:hover i { transform: scale(1.1) rotate(5deg); opacity: 1; filter: drop-shadow(0 0 8px var(--accent)); }
+        
+        .service-card h3 { font-family: var(--font-tech); font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: -0.5px; }
+        .service-card ul { list-style: none; font-size: 0.85rem; color: var(--text-dim); }
+        .service-card li { margin-bottom: 7px; display: flex; align-items: flex-start; gap: 8px; }
+        .service-card li::before { content: "— "; color: var(--accent); font-weight: bold; opacity: 0.5; }
+
+        .card-wide { grid-column: span 6; }
+        .card-full { grid-column: span 12; background: rgba(0, 229, 255, 0.01); border-style: dashed; }
+
+        /* --- FOOTER: Estilo Panel de Control --- */
+        footer { padding: 120px 0; border-top: 1px solid var(--border); text-align: center; background: #000; }
+        .final-cta { text-align: center; }
+
+        @media (max-width: 768px) {
+            .service-card, .card-wide { grid-column: span 12; padding: 30px; }
+            .hero h1 { font-size: 3.5rem; }
+            .container { padding: 0 20px; }
+        }
     </style>
 </head>
-<body class="font-sans antialiased">
-    <div class="fixed inset-0 grid-bg z-[-1]"></div>
+<body>
 
-    <nav class="fixed top-0 w-full z-50 border-b border-white/5 glass">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-            <div class="font-mono font-bold tracking-tighter text-sm md:text-base">
-                SOLUCIONES GLOBALES <span class="text-accent">// IT</span>
-            </div>
-            <div class="hidden md:block font-mono text-[10px] text-white/40 uppercase tracking-widest">
-                Córdoba, AR — System Admin
-            </div>
+    <div id="preloader">
+        <div class="loader-text">INICIALIZANDO CORE IT...</div>
+        <div class="loader-line">
+            <div class="loader-progress"></div>
         </div>
-    </nav>
+    </div>
 
-    <main class="max-w-7xl mx-auto px-6 pt-40 pb-20">
-        <header class="mb-32">
-            <span class="font-mono text-accent text-xs tracking-[0.4em] uppercase block mb-4">Infrastructure & Systems</span>
-            <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8">
-                Christian<br/>Succar
-            </h1>
-            <p class="text-gray-500 max-w-xl text-lg mb-10 leading-relaxed">
-                Consultoría técnica de alto nivel. Networking, despliegue de servidores y soluciones digitales integrales.
-            </p>
-            <a href="https://wa.me/5493515642264" target="_blank" 
-               class="inline-flex items-center gap-4 border border-accent/30 bg-accent/5 px-8 py-4 rounded-sm text-accent font-semibold hover:bg-accent hover:text-black transition-all duration-300">
-                CONTACTO DIRECTO <i class="fas fa-bolt text-xs"></i>
-            </a>
-        </header>
+    <canvas id="bg-canvas"></canvas>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="container">
+        <nav style="padding: 30px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); ">
+            <div class="hero-label" style="margin:0; font-weight:700;">SOLUCIONES GLOBALES <span style="color:var(--accent);">IT</span></div>
+            <div class="hero-label" style="margin:0; color:#444;">ACSUCCAR@HOTMAIL.COM</div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-label hidden-element">// Christian Succar //</div>
+            <h1 class="hidden-element">Infrastructure<br><span>System</span> Pro</h1>
+            <div class="hero-details hidden-element">
+                <div class="detail-item"><strong>MikroTik</strong>Certified Pro</div>
+                <div class="detail-item"><strong>Linux</strong>Debian/Ubuntu Server</div>
+                <div class="detail-item"><strong>AppleSilicon</strong>MaxPerformance Support</div>
+                <div class="detail-item"><strong>Córdoba, AR</strong>Soporte Global</div>
+            </div>
+            <div class="hidden-element" style="text-align: left;">
+                <a href="https://wa.me/5493515642264" class="btn-connect" target="_blank">
+                    <i class="fab fa-whatsapp"></i> ESTABLECER CONEXIÓN WHATSAPP
+                </a>
+            </div>
+        </section>
+
+        <span class="section-label hidden-element">// Módulos Técnicos Disponibles</span>
+        <div class="services-grid">
             
-            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fas fa-network-wired text-2xl text-accent/80"></i>
-                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Network</span>
-                </div>
-                <h3 class="text-xl font-semibold mb-4 tracking-tight">Networking & MikroTik</h3>
-                <ul class="space-y-3 text-sm text-gray-400 font-light">
-                    <li><span class="text-accent/50 mr-2">›</span> Configuración de Routers & APs</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Ruteo Avanzado BGP / OSPF / VPN</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Firewalling & Control de Tráfico QoS</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Acceso Remoto DynDNS / No-IP</li>
+            <div class="service-tile card-wide hidden-element service-card">
+                <i class="fas fa-network-wired"></i>
+                <h3>Redes MikroTik</h3>
+                <ul>
+                    <li>Routers, Access Points & Enrutamiento avanzado</li>
+                    <li>Rutas estáticas/dinámicas OSPF, Firewall Avanzado & DDoS</li>
+                    <li>DynDNS / VPNs Encriptadas / Acceso Remoto seguro</li>
+                    <li>Soporte Presencial y Remoto para Empresas/Proveedores</li>
                 </ul>
             </div>
 
-            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fab fa-linux text-2xl text-accent/80"></i>
-                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">SysAdmin</span>
-                </div>
-                <h3 class="text-xl font-semibold mb-4 tracking-tight">Servidores Linux</h3>
-                <ul class="space-y-3 text-sm text-gray-400 font-light">
-                    <li><span class="text-accent/50 mr-2">›</span> Instalación Ubuntu / Debian Server</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Docker & Virtualización Pro</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Backups Automáticos & Redundancia</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Servicios Samba / VPN / DNS</li>
+            <div class="service-tile card-wide hidden-element service-card">
+                <i class="fab fa-linux"></i>
+                <h3>Servidores Linux</h3>
+                <ul>
+                    <li>Instalación y Configuración Debian/Ubuntu Server Pro</li>
+                    <li>Docker, Virtualización Pro & Backups automatizados</li>
+                    <li>Servicios Samba, FTP, monittoreo y actualizaciones críticas</li>
+                    <li>DynDNS, VPN y Control de acceso remoto seguro</li>
                 </ul>
             </div>
 
-            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fab fa-apple text-2xl text-accent/80"></i>
-                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Apple silicon</span>
-                </div>
-                <h3 class="text-xl font-semibold mb-4 tracking-tight">Apple Pro Support</h3>
-                <ul class="space-y-3 text-sm text-gray-400 font-light">
-                    <li><span class="text-accent/50 mr-2">›</span> Optimización M1, M2 y M3</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Windows via Parallels Desktop</li>
-                    <li><span class="text-accent/50 mr-2">›</span> AutoCAD / SolidWorks / Rhino</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Recuperación de Datos Críticos</li>
+            <div class="service-tile hidden-element service-card">
+                <i class="fab fa-apple"></i>
+                <h3>Apple Pro Support</h3>
+                <ul>
+                    <li>Optimización M1, M2 y M3 Silicon native</li>
+                    <li>Virtualización Parallels/Windows 11 en Mac Silicon</li>
+                    <li>Puesta a punto Software Técnico: Rhinoceros, SolidWorks, AutoCAD</li>
+                    <li>Migración Pro, recuperación de datos y ajuste completo</li>
                 </ul>
             </div>
 
-            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group lg:col-span-2">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fas fa-file-medical text-2xl text-accent/80"></i>
-                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Healthcare</span>
-                </div>
-                <h3 class="text-xl font-semibold mb-4 tracking-tight">Sistemas para Medicina Privada</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <ul class="space-y-3 text-sm text-gray-400 font-light">
-                        <li><span class="text-accent/50 mr-2">›</span> Historia Clínica Electrónica</li>
-                        <li><span class="text-accent/50 mr-2">›</span> Gestión de Turnos Online</li>
-                    </ul>
-                    <ul class="space-y-3 text-sm text-gray-400 font-light">
-                        <li><span class="text-accent/50 mr-2">›</span> Facturación a Obras Sociales</li>
-                        <li><span class="text-accent/50 mr-2">›</span> Portal de Resultados Web</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fab fa-bitcoin text-2xl text-accent/80"></i>
-                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Exchange</span>
-                </div>
-                <h3 class="text-xl font-semibold mb-4 tracking-tight">Crypto Exchange</h3>
-                <ul class="space-y-3 text-sm text-gray-400 font-light">
-                    <li><span class="text-accent/50 mr-2">›</span> Cambio USDT / BTC a Dólares</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Máxima Discreción</li>
-                    <li><span class="text-accent/50 mr-2">›</span> Transacciones en el Acto</li>
+            <div class="service-tile hidden-element service-card">
+                <i class="fas fa-file-medical"></i>
+                <h3>Sistemas de Salud</h3>
+                <ul>
+                    <li>Historia Clínica Electrónica Integrada</li>
+                    <li>Gestión de Turnos, Facturación Obras Sociales, Inventario</li>
+                    <li>Portal Paciente (Resultados Web) y Reportes Estadísticos</li>
+                    <li>Seguro, Accesible, Eficiente, Adaptado a la Institución</li>
                 </ul>
             </div>
 
-            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group lg:col-span-3">
-                <div class="flex justify-between items-start mb-6">
-                    <i class="fas fa-microchip text-2xl text-accent/80"></i>
-                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Hardware Distribution</span>
-                </div>
-                <div class="flex flex-col md:flex-row justify-between gap-8">
-                    <div class="max-w-md">
-                        <h3 class="text-xl font-semibold mb-2 tracking-tight">Hardware High-End & Servers</h3>
-                        <p class="text-gray-500 text-sm italic">Venta y configuración de equipamiento corporativo.</p>
-                    </div>
-                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-3 text-sm text-gray-400 font-light flex-1">
-                        <li><span class="text-accent/50 mr-2">›</span> Placas de Video NVIDIA RTX / Radeon</li>
-                        <li><span class="text-accent/50 mr-2">›</span> Servidores Dell / HP (Nuevos y Usados)</li>
-                        <li><span class="text-accent/50 mr-2">›</span> Workstations de Alto Rendimiento</li>
-                        <li><span class="text-accent/50 mr-2">›</span> Almacenamiento NAS & Networking</li>
-                    </ul>
-                </div>
+            <div class="service-tile hidden-element service-card">
+                <i class="fab fa-bitcoin"></i>
+                <h3>Crypto Exchange</h3>
+                <ul>
+                    <li>Compra / Venta [ cite: B2B21B82-50DA-4589-80C7-9C2C09F3CB54.PNG]</li>
+                    <li>Cambiá USDT / BTC a Dólares Físicos [ cite: B2B21B82-50DA-4589-80C7-9C2C09F3CB54.PNG]</li>
+                    <li>Confidencialidad absoluta y máxima discreción</li>
+                    <li>Dólares nuevos y en excelente estado al momento</li>
+                </ul>
+            </div>
+
+            <div class="service-tile hidden-element card-full service-card">
+                <i class="fas fa-microchip"></i>
+                <h3>Hardware High-End Pro</h3>
+                <ul>
+                    <li>Venta de Placas de Video de última generación (NVIDIA RTX / Radeon Pro)</li>
+                    <li>Servidores DELL/HP nuevos y usados a medida</li>
+                    <li>Almacenamiento NAS/SSD Pro, Switcheo de alto rendimiento</li>
+                </ul>
             </div>
 
         </div>
-    </main>
 
-    <footer class="border-t border-white/5 py-20 bg-black/40 text-center">
-        <div class="max-w-xl mx-auto px-6">
-            <h2 class="text-4xl font-bold tracking-tight mb-4">¿Listo para escalar?</h2>
-            <p class="text-gray-500 mb-10 text-sm font-mono uppercase tracking-widest">Córdoba Capital // Soporte Global</p>
-            <a href="https://wa.me/5493515642264" 
-               class="bg-accent text-black font-bold px-10 py-5 rounded-full hover:scale-105 transition-transform inline-block">
-                WHATSAPP: 351 5642264
-            </a>
-            <div class="mt-16 font-mono text-[10px] text-white/20 uppercase tracking-[0.3em]">
-                acsuccar@hotmail.com | Christian Succar © 2026
+        <footer>
+            <div class="final-cta hidden-element">
+                <span class="section-label" style="margin:0;">// Establecer Conexión Directa //</span>
+                <h2 style="font-family: var(--font-tech); font-size: 3rem; margin: 20px 0; font-weight:700; letter-spacing: -2px;">¿Listo para escalar?</h2>
+                <a href="https://wa.me/5493515642264" class="btn-connect" target="_blank" style="margin-top:20px;">
+                    <i class="fab fa-whatsapp"></i> +54 9 351 5642264
+                </a>
+                <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #444; margin-top: 60px; line-height: 1.2;">
+                    Christian Succar <br>
+                    CÓRDOBA CAPITAL // SOPORTE GLOBAL
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
+
+    <script>
+        // --- Animación de Fondo (Partículas Cinematográficas) ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 229, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() { for (let i = 0; i < 70; i++) particles.push(new Particle()); }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        createParticles();
+        animateParticles();
+
+        // --- CONTROL DE CARGA (FADE OUT PRELOADER) ---
+        window.addEventListener('load', () => {
+            // Simulamos 2 segundos de carga para la intro cinematográfica
+            setTimeout(() => {
+                gsap.to("#preloader", {
+                    opacity: 0,
+                    duration: 1,
+                    onComplete: () => {
+                        document.getElementById('preloader').style.display = 'none';
+                        // Activamos la entrada Staggered del Hero
+                        triggerHeroIntro();
+                    }
+                });
+            }, 2000); 
+        });
+
+        // --- ANIMACIONES GSAP (ESTILO FLASH FLUIDO) ---
+        function triggerHeroIntro() {
+            const tl = gsap.timeline();
+            tl.from(".hero .hidden-element", {
+                opacity: 0,
+                x: -100, // Vuelan desde la izquierda
+                stagger: 0.3, // Cascada de 0.3s
+                duration: 1.5,
+                ease: "expo.out" // Entrada cinematográfica
+            });
+            
+            // Entrada cascada de los servicios en el grid (al hacer scroll)
+            gsap.from(".service-tile", {
+                scrollTrigger: {
+                    trigger: ".services-grid",
+                    start: "top 80%", // Empieza cuando el grid está 80% visible
+                },
+                opacity: 0,
+                y: 50, // Vuelan desde abajo
+                stagger: 0.2, // Cascada de 0.2s
+                duration: 1,
+                ease: "power3.out"
+            });
+
+            // Entrada final del CTA del footer
+            gsap.from(".final-cta", {
+                scrollTrigger: { trigger: "footer", start: "top 90%" },
+                opacity: 0,
+                scale: 0.5, // Hacen zoom in
+                duration: 1,
+                ease: "elastic.out(1, 0.5)" // Rebote minimalista
+            });
+        }
+    </script>
 </body>
 </html>
