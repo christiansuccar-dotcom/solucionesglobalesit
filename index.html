@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Christian Succar | Soluciones Globales IT</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -30,194 +26,154 @@
         }
     </script>
     <style>
-        body { background-color: #0a0a0b; color: #f5f5f7; }
+        body { background-color: #0a0a0b; color: #f5f5f7; scroll-behavior: smooth; }
         .grid-bg {
-            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
+            background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
         }
+        .glass { background: rgba(19, 19, 21, 0.8); backdrop-filter: blur(12px); }
+        .card-hover:hover { border-color: rgba(0, 229, 255, 0.4); transform: translateY(-4px); }
     </style>
 </head>
-<body>
-    <div id="root"></div>
+<body class="font-sans antialiased">
+    <div class="fixed inset-0 grid-bg z-[-1]"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        const { motion, AnimatePresence } = FramerMotion;
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 glass">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="font-mono font-bold tracking-tighter text-sm md:text-base">
+                SOLUCIONES GLOBALES <span class="text-accent">// IT</span>
+            </div>
+            <div class="hidden md:block font-mono text-[10px] text-white/40 uppercase tracking-widest">
+                Córdoba, AR — System Admin
+            </div>
+        </div>
+    </nav>
 
-        const ServiceCard = ({ title, icon, items, badge, wide = false }) => (
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className={`bg-card border border-white/5 p-8 hover:border-accent/50 transition-all duration-500 group ${wide ? 'md:col-span-2' : ''}`}
-            >
-                <div className="flex justify-between items-start mb-6">
-                    <i className={`${icon} text-2xl text-accent/80 group-hover:text-accent transition-colors`}></i>
-                    <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest">{badge}</span>
+    <main class="max-w-7xl mx-auto px-6 pt-40 pb-20">
+        <header class="mb-32">
+            <span class="font-mono text-accent text-xs tracking-[0.4em] uppercase block mb-4">Infrastructure & Systems</span>
+            <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8">
+                Christian<br/>Succar
+            </h1>
+            <p class="text-gray-500 max-w-xl text-lg mb-10 leading-relaxed">
+                Consultoría técnica de alto nivel. Networking, despliegue de servidores y soluciones digitales integrales.
+            </p>
+            <a href="https://wa.me/5493515642264" target="_blank" 
+               class="inline-flex items-center gap-4 border border-accent/30 bg-accent/5 px-8 py-4 rounded-sm text-accent font-semibold hover:bg-accent hover:text-black transition-all duration-300">
+                CONTACTO DIRECTO <i class="fas fa-bolt text-xs"></i>
+            </a>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fas fa-network-wired text-2xl text-accent/80"></i>
+                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Network</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-4 tracking-tight">{title}</h3>
-                <ul className="space-y-3">
-                    {items.map((item, idx) => (
-                        <li key={idx} className="text-sm text-gray-400 flex gap-3">
-                            <span className="text-accent/50 font-bold">›</span>
-                            {item}
-                        </li>
-                    ))}
+                <h3 class="text-xl font-semibold mb-4 tracking-tight">Networking & MikroTik</h3>
+                <ul class="space-y-3 text-sm text-gray-400 font-light">
+                    <li><span class="text-accent/50 mr-2">›</span> Configuración de Routers & APs</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Ruteo Avanzado BGP / OSPF / VPN</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Firewalling & Control de Tráfico QoS</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Acceso Remoto DynDNS / No-IP</li>
                 </ul>
-            </motion.div>
-        );
+            </div>
 
-        const App = () => {
-            return (
-                <div className="min-h-screen relative overflow-hidden font-sans">
-                    <div className="fixed inset-0 grid-bg z-[-1]"></div>
-                    
-                    {/* Header */}
-                    <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-dark/80 backdrop-blur-md">
-                        <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-                            <div className="font-mono font-bold tracking-tighter">
-                                SOLUCIONES GLOBALES <span className="text-accent">// IT</span>
-                            </div>
-                            <div className="hidden md:block font-mono text-[10px] text-white/40">
-                                SYSADMIN: CHRISTIAN SUCCAR | CÓRDOBA, AR
-                            </div>
-                        </div>
-                    </nav>
-
-                    <main className="max-w-7xl mx-auto px-6 pt-40 pb-20">
-                        {/* Hero Section */}
-                        <section className="mb-32">
-                            <motion.span 
-                                initial={{ opacity: 0 }} 
-                                animate={{ opacity: 1 }}
-                                className="font-mono text-accent text-xs tracking-[0.3em] uppercase block mb-4"
-                            >
-                                Infrastructure Specialist
-                            </motion.span>
-                            <motion.h1 
-                                initial={{ opacity: 0, x: -30 }} 
-                                animate={{ opacity: 1, x: 0 }}
-                                className="text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8"
-                            >
-                                Christian<br/>Succar
-                            </motion.h1>
-                            <motion.p 
-                                initial={{ opacity: 0 }} 
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.2 }}
-                                className="text-gray-500 max-w-xl text-lg mb-10"
-                            >
-                                Especialista en infraestructura de misión crítica, redes avanzadas y sistemas integrales para empresas y salud privada.
-                            </motion.p>
-                            <motion.a 
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                href="https://wa.me/5493515642264"
-                                className="inline-flex items-center gap-4 border border-accent px-8 py-4 rounded-sm text-accent font-semibold hover:bg-accent hover:text-black transition-all"
-                            >
-                                INICIAR SOPORTE <i className="fas fa-arrow-right text-xs"></i>
-                            </motion.a>
-                        </section>
-
-                        {/* Services Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            
-                            <ServiceCard 
-                                title="Networking & MikroTik"
-                                icon="fas fa-network-wired"
-                                badge="Connectivity"
-                                wide={true}
-                                items={[
-                                    "Configuración de Routers & Access Points Ubiquiti/MikroTik",
-                                    "Enrutamiento avanzado BGP, OSPF y VPN Encriptadas",
-                                    "Firewalling avanzado, QoS y Control de tráfico seguro",
-                                    "Acceso remoto y DynDNS / No-IP para sucurasales"
-                                ]}
-                            />
-
-                            <ServiceCard 
-                                title="Apple Pro Support"
-                                icon="fab fa-apple"
-                                badge="Mac Pro"
-                                items={[
-                                    "Especialistas en chips Apple Silicon M1, M2 y M3",
-                                    "Windows con Parallels Desktop optimizado",
-                                    "Instalación de AutoCAD, SolidWorks y Rhinoceros",
-                                    "Recuperación y migración de datos críticos"
-                                ]}
-                            />
-
-                            <ServiceCard 
-                                title="Sistemas de Salud"
-                                icon="fas fa-file-medical"
-                                badge="Health Tech"
-                                wide={true}
-                                items={[
-                                    "Digitalización de Hospitales, Clínicas y Consultorios",
-                                    "Historia Clínica Electrónica y Gestión de Turnos Online",
-                                    "Facturación a Obras Sociales y Portal de Resultados",
-                                    "Control de Stock de medicamentos y Reportes en tiempo real"
-                                ]}
-                            />
-
-                            <ServiceCard 
-                                title="Crypto Exchange"
-                                icon="fab fa-bitcoin"
-                                badge="Finance"
-                                items={[
-                                    "Cambiá tus Crypto (USDT, BTC, ETH) a Dólares Físicos",
-                                    "Operaciones seguras TRC20 / BEP20 / ERC20",
-                                    "Máxima discreción y confidencialidad absoluta",
-                                    "Dólares nuevos y en excelente estado al momento"
-                                ]}
-                            />
-
-                            <ServiceCard 
-                                title="Servidores Linux"
-                                icon="fab fa-linux"
-                                badge="Backend"
-                                items={[
-                                    "Instalación de Ubuntu y Debian Server optimizados",
-                                    "Gestión de Docker, Virtualización y Backups automáticos",
-                                    "Configuración de servicios Samba, FTP y VPN remotas",
-                                    "Monitoreo preventivo y Hardening de seguridad"
-                                ]}
-                            />
-
-                            <ServiceCard 
-                                title="Hardware High-End"
-                                icon="fas fa-microchip"
-                                badge="Hardware"
-                                items={[
-                                    "Venta de Placas de Video NVIDIA GeForce RTX y AMD Radeon",
-                                    "Servidores Dell, HP y Supermicro nuevos y usados",
-                                    "Configuraciones a medida para Gaming y Diseño 3D",
-                                    "Almacenamiento SSD/HDD, NAS y Switcheo de alto rendimiento"
-                                ]}
-                            />
-
-                        </div>
-                    </main>
-
-                    {/* Footer */}
-                    <footer className="border-t border-white/5 py-20 bg-black/40 text-center">
-                        <div className="max-w-xl mx-auto px-6">
-                            <h2 className="text-4xl font-bold tracking-tight mb-4">¿Hablamos?</h2>
-                            <p className="text-gray-500 mb-10">Servicio técnico en Córdoba Capital y soporte remoto global.</p>
-                            <a href="https://wa.me/5493515642264" className="bg-accent text-black font-bold px-10 py-5 rounded-full hover:scale-105 transition-transform inline-block">
-                                WHATSAPP: 351 5642264
-                            </a>
-                            <div className="mt-16 font-mono text-[11px] text-white/20 uppercase tracking-widest">
-                                ACSUCCAR@HOTMAIL.COM | CÓRDOBA, ARGENTINA
-                            </div>
-                        </div>
-                    </footer>
+            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fab fa-linux text-2xl text-accent/80"></i>
+                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">SysAdmin</span>
                 </div>
-            );
-        };
+                <h3 class="text-xl font-semibold mb-4 tracking-tight">Servidores Linux</h3>
+                <ul class="space-y-3 text-sm text-gray-400 font-light">
+                    <li><span class="text-accent/50 mr-2">›</span> Instalación Ubuntu / Debian Server</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Docker & Virtualización Pro</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Backups Automáticos & Redundancia</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Servicios Samba / VPN / DNS</li>
+                </ul>
+            </div>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fab fa-apple text-2xl text-accent/80"></i>
+                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Apple silicon</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-4 tracking-tight">Apple Pro Support</h3>
+                <ul class="space-y-3 text-sm text-gray-400 font-light">
+                    <li><span class="text-accent/50 mr-2">›</span> Optimización M1, M2 y M3</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Windows via Parallels Desktop</li>
+                    <li><span class="text-accent/50 mr-2">›</span> AutoCAD / SolidWorks / Rhino</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Recuperación de Datos Críticos</li>
+                </ul>
+            </div>
+
+            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group lg:col-span-2">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fas fa-file-medical text-2xl text-accent/80"></i>
+                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Healthcare</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-4 tracking-tight">Sistemas para Medicina Privada</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ul class="space-y-3 text-sm text-gray-400 font-light">
+                        <li><span class="text-accent/50 mr-2">›</span> Historia Clínica Electrónica</li>
+                        <li><span class="text-accent/50 mr-2">›</span> Gestión de Turnos Online</li>
+                    </ul>
+                    <ul class="space-y-3 text-sm text-gray-400 font-light">
+                        <li><span class="text-accent/50 mr-2">›</span> Facturación a Obras Sociales</li>
+                        <li><span class="text-accent/50 mr-2">›</span> Portal de Resultados Web</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fab fa-bitcoin text-2xl text-accent/80"></i>
+                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Exchange</span>
+                </div>
+                <h3 class="text-xl font-semibold mb-4 tracking-tight">Crypto Exchange</h3>
+                <ul class="space-y-3 text-sm text-gray-400 font-light">
+                    <li><span class="text-accent/50 mr-2">›</span> Cambio USDT / BTC a Dólares</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Máxima Discreción</li>
+                    <li><span class="text-accent/50 mr-2">›</span> Transacciones en el Acto</li>
+                </ul>
+            </div>
+
+            <div class="bg-card border border-white/5 p-8 card-hover transition-all duration-500 group lg:col-span-3">
+                <div class="flex justify-between items-start mb-6">
+                    <i class="fas fa-microchip text-2xl text-accent/80"></i>
+                    <span class="font-mono text-[10px] text-white/20 uppercase tracking-widest">Hardware Distribution</span>
+                </div>
+                <div class="flex flex-col md:flex-row justify-between gap-8">
+                    <div class="max-w-md">
+                        <h3 class="text-xl font-semibold mb-2 tracking-tight">Hardware High-End & Servers</h3>
+                        <p class="text-gray-500 text-sm italic">Venta y configuración de equipamiento corporativo.</p>
+                    </div>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-3 text-sm text-gray-400 font-light flex-1">
+                        <li><span class="text-accent/50 mr-2">›</span> Placas de Video NVIDIA RTX / Radeon</li>
+                        <li><span class="text-accent/50 mr-2">›</span> Servidores Dell / HP (Nuevos y Usados)</li>
+                        <li><span class="text-accent/50 mr-2">›</span> Workstations de Alto Rendimiento</li>
+                        <li><span class="text-accent/50 mr-2">›</span> Almacenamiento NAS & Networking</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="border-t border-white/5 py-20 bg-black/40 text-center">
+        <div class="max-w-xl mx-auto px-6">
+            <h2 class="text-4xl font-bold tracking-tight mb-4">¿Listo para escalar?</h2>
+            <p class="text-gray-500 mb-10 text-sm font-mono uppercase tracking-widest">Córdoba Capital // Soporte Global</p>
+            <a href="https://wa.me/5493515642264" 
+               class="bg-accent text-black font-bold px-10 py-5 rounded-full hover:scale-105 transition-transform inline-block">
+                WHATSAPP: 351 5642264
+            </a>
+            <div class="mt-16 font-mono text-[10px] text-white/20 uppercase tracking-[0.3em]">
+                acsuccar@hotmail.com | Christian Succar © 2026
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
